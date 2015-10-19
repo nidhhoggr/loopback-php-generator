@@ -1,0 +1,27 @@
+{
+    "name": "touhonoob/loopback-php-genrator",
+    "description": "Loopback PHP Generators",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter Chung",
+            "email": "touhonoob@gmail.com"
+        }
+    ],
+    "require": {
+        "nette/php-generator": "^2.3",
+        "symfony/console": "^2.7",
+        "symfony/config": "^2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "LoopbackPHP\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LoopbackPHP\\Tests\\": "tests"
+        }
+    },
+    "bin": ["bin/loopback-php"]
+}
