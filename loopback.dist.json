@@ -6,5 +6,6 @@
   "build": {
     "classes": "./build/classes",
     "configs": "./build/configs"
-  }
+  },
+  "namespace": "Models"
 }

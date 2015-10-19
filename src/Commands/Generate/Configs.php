@@ -26,13 +26,10 @@ class Configs extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getHelper('dialog');
-        $modelName = $input->getArgument('modelName');
-
         $config = $this->getApplication()->getConfig();
 
-        $modelsDirectory = $config['loopback']['modelsDirectory'];
-        $modelPath = realpath($modelsDirectory . '/' . $modelName . '.json');
-        $model = new Model($modelPath);
+        $modelName = $input->getArgument('modelName');
+        $model = $this->getModel($modelName);
 
         $buildDirectory = $config['build']['configs'];
         $buildPath = $buildDirectory . '/' . $modelName . '.json';
