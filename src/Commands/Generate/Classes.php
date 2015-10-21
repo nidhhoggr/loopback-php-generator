@@ -29,9 +29,6 @@ class Classes extends Command
             );
     }
 
-    /**
-     * TODO: integrate with build/configs
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $config = $this->getApplication()->getConfig();
@@ -54,27 +51,37 @@ class Classes extends Command
             }
         }
 
-        $modelConfig = ['properties' => []];
-        foreach ($model->properties as $property => $propertyDef) {
-            $modelConfig['properties'][] = $property;
+        $modelConfig = ['properties' => $model->properties];
+        $configsDirectory = $config['build']['configs'];
+        $configPath = realpath($configsDirectory . '/' . $modelName . '.json');
+        if (file_exists($configPath)) {
+            $modelConfig = json_decode(file_get_contents($configPath), true);
         }
 
-        $namespace = new PhpNamespace('Crowdsdom\\Models');
+        $namespace = new PhpNamespace($config['namespace']);
+        $namespace->addUse($config['extends']);
 
         $class = new ClassType($className, $namespace);
-        $class->addExtend('Crowdsdom\\Models\\Model');
+        $class->addExtend($config['extends']);
 
         foreach ($model->properties as $property => $propertyDef) {
-            $property = $class->addProperty($property)->setVisibility('public');
+            if(in_array($property, $modelConfig['properties'], true)) {
+                $property = $class->addProperty($property)->setVisibility('public');
 
-            if(is_string($propertyDef['type'])) {
-                $property->addDocument("@var {$propertyDef['type']}");
+                if (is_string($propertyDef['type'])) {
+                    $property->addDocument("@var {$propertyDef['type']}");
+                } else {
+                    $property->addDocument("@var mixed");
+                }
             } else {
-                $property->addDocument("@var mixed");
+                $output->writeln(sprintf("<info>Skipped property %s</info>", $property));
             }
         }
 
         file_put_contents($buildPath, str_replace("\t", "    ", "<?php\n{$namespace}{$class}"));
+
+        // TODO: replace with PHP_CodeSniffer library
+        exec(sprintf('/usr/bin/phpcbf --standard=PSR2 --encoding=utf-8 "%s"', $buildPath));
 
         $output->writeln(sprintf("<info>Class %s created</info>", $buildPath));
     }

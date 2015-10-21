@@ -19,6 +19,7 @@ class Application extends \Symfony\Component\Console\Application
         $defaultCommands = parent::getDefaultCommands();
 
         $defaultCommands[] = new \LoopbackPHP\Commands\Generate\Classes();
+        $defaultCommands[] = new \LoopbackPHP\Commands\Generate\Classes\All();
         $defaultCommands[] = new \LoopbackPHP\Commands\Generate\Configs();
 
         return $defaultCommands;
