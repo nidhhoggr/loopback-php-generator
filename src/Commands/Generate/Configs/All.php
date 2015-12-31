@@ -21,11 +21,24 @@ class All extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $config = $this->getApplication()->getConfig();
-        foreach ($config['models'] as $className => $modelName) {
+
+
+
+        foreach ($config['models'] as $className => $model) {
+
+            if(is_array($model)) {
+              $arrayInputArgs = [
+                'modelName' => $model["modelName"]
+              ];
+            }
+            else {
+               $arrayInputArgs = [
+                'modelName' => $model
+              ];
+            }
+
             $command = $this->getApplication()->find('generate:config');
-            $arrayInput = new ArrayInput([
-                'modelName' => $modelName
-            ], $command->getNativeDefinition());
+            $arrayInput = new ArrayInput($arrayInputArgs, $command->getNativeDefinition());
             $arrayInput->setInteractive(true);
             $command->execute($arrayInput, $output);
         }
