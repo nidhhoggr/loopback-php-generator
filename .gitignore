@@ -3,4 +3,5 @@ vendor
 node_modules
 composer.lock
 loopback.json
-build/*
+build/classes/*
+build/configs/*
