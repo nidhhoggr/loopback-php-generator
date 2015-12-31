@@ -75,17 +75,28 @@ class Classes extends Command
           $class->addConst("ENDPOINT", $endPoint);
         }
 
-        foreach ($model->properties as $property => $propertyDef) {
-            if(in_array($property, $modelConfig['properties'], true)) {
-                $property = $class->addProperty($property)->setVisibility('public');
-
+        foreach ($model->properties as $propertyName => $propertyDef) {
+            if(in_array($propertyName, $modelConfig['properties'], true)) {
+              
+                $property = $class->addProperty($propertyName)->setVisibility('public');
+           
+                $accessorMethod = $class->addMethod($this->toCamelCase("get_" . ($propertyName)));
+                
+                $accessorMethod->setBody('return $this->' . $propertyName . ';');
+         
+                $mutatorMethod = $class->addMethod($this->toCamelCase("set_" . ($propertyName)));
+       
+                $mutatorMethod->addParameter($propertyName);
+     
+                $mutatorMethod->setBody('$this->' . $propertyName . ' = $'.$propertyName.';');
+   
                 if (is_string($propertyDef['type'])) {
                     $property->addDocument("@var {$propertyDef['type']}");
                 } else {
                     $property->addDocument("@var mixed");
                 }
             } else {
-                $output->writeln(sprintf("<info>Skipped property %s</info>", $property));
+                $output->writeln(sprintf("<info>Skipped property %s</info>", $propertyName));
             }
         }
 
@@ -95,5 +106,13 @@ class Classes extends Command
         exec(sprintf('vendor/bin/phpcbf --standard=PSR2 --encoding=utf-8 "%s"', $buildPath));
 
         $output->writeln(sprintf("<info>Class %s created</info>", $buildPath));
+    }
+
+    private function toCamelCase($str, $capitalise_first_char = false) {
+        if($capitalise_first_char) {
+            $str[0] = strtoupper($str[0]);
+        }
+        $func = create_function('$c', 'return strtoupper($c[1]);');
+        return preg_replace_callback('/_([a-z])/', $func, $str);
     }
 }
