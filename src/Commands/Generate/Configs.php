@@ -2,10 +2,10 @@
 namespace LoopbackPHP\Commands\Generate;
 
 use LoopbackPHP\Loopback\Model;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use LoopbackPHP\Commands\Command;
 
 class Configs extends Command
 {

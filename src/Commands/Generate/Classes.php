@@ -81,7 +81,7 @@ class Classes extends Command
         file_put_contents($buildPath, str_replace("\t", "    ", "<?php\n{$namespace}{$class}"));
 
         // TODO: replace with PHP_CodeSniffer library
-        exec(sprintf('/usr/bin/phpcbf --standard=PSR2 --encoding=utf-8 "%s"', $buildPath));
+        exec(sprintf('vendor/bin/phpcbf --standard=PSR2 --encoding=utf-8 "%s"', $buildPath));
 
         $output->writeln(sprintf("<info>Class %s created</info>", $buildPath));
     }
