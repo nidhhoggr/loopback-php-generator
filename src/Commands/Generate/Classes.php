@@ -26,7 +26,13 @@ class Classes extends Command
                 'modelName',
                 InputArgument::REQUIRED,
                 'Loopback model name'
+            )
+            ->addArgument(
+                'endPoint',
+                InputArgument::OPTIONAL,
+                'Loopback model endpoint'
             );
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -35,6 +41,7 @@ class Classes extends Command
         $dialog = $this->getHelper('dialog');
         $className = $input->getArgument('className');
         $modelName = $input->getArgument('modelName');
+        $endPoint = $input->getArgument('endPoint');
 
         $model = $this->getModel($modelName);
 
@@ -63,6 +70,10 @@ class Classes extends Command
 
         $class = new ClassType($className, $namespace);
         $class->addExtend($config['extends']);
+
+        if(!empty($endPoint)) {
+          $class->addConst("ENDPOINT", $endPoint);
+        }
 
         foreach ($model->properties as $property => $propertyDef) {
             if(in_array($property, $modelConfig['properties'], true)) {

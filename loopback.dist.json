@@ -10,6 +10,10 @@
   "namespace": "Models",
   "extends": "Models\\BaseModel",
   "models": {
-    "ModelClass": "my-model"
+    "ModelClass": "my-model",
+    "ModelClassWithEndPoint": {
+      "modelName": "my-model-with-endpoint",
+      "endPoint": "my-models-endpoint"
+    }
   }
 }
