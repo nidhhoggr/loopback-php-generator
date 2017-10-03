@@ -72,7 +72,7 @@ class Classes extends Command
         $class->addExtend($config['extends']);
 
         if(!empty($endPoint)) {
-          $class->addConst("ENDPOINT", $endPoint);
+          $class->addConstant("ENDPOINT", $endPoint);
         }
 
         foreach ($model->properties as $propertyName => $propertyDef) {
@@ -91,9 +91,9 @@ class Classes extends Command
                 $mutatorMethod->setBody('$this->' . $propertyName . ' = $'.$propertyName.';');
    
                 if (is_string($propertyDef['type'])) {
-                    $property->addDocument("@var {$propertyDef['type']}");
+                    $property->addComment("@var {$propertyDef['type']}");
                 } else {
-                    $property->addDocument("@var mixed");
+                    $property->addComment("@var mixed");
                 }
             } else {
                 $output->writeln(sprintf("<info>Skipped property %s</info>", $propertyName));

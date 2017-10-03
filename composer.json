@@ -9,8 +9,8 @@
         }
     ],
     "require": {
-        "php": ">=5.6",
-        "nette/php-generator": "dev-master",
+        "php": ">=7.1",
+        "nette/php-generator": "^3.1",
         "symfony/console": "^2.7",
         "symfony/config": "^2.7",
         "nesbot/carbon": "^1.20",
